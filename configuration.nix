@@ -64,6 +64,7 @@
       "opencode"
       "ripgrep"
       "rubberband"
+      "sdl2-compat"  # required by ffmpeg; zap would otherwise uninstall it every switch
       "sshpass"
       "steipete/tap/imsg"
       "tesseract-lang"
