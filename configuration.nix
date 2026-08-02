@@ -38,10 +38,12 @@
     onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
     # steipete/tap provides the imsg formula; kunchenguid/tap provides the
-    # pi-launcher cask; keep both declared or zap would untap them.
+    # pi-launcher cask; farion1231/ccswitch provides the cc-switch cask.
+    # Keep them all declared or zap would untap them.
     taps = [
       { name = "steipete/tap"; }
       { name = "kunchenguid/tap"; }
+      { name = "farion1231/ccswitch"; }
     ];
     # Everything on this machine must be listed here - zap removes anything that isn't.
     brews = [
