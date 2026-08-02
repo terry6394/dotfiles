@@ -28,18 +28,51 @@
   nix-homebrew = {
     enable = true;
     inherit user;
+    # cyril's /opt/homebrew was installed by the official script; let nix-homebrew
+    # adopt it while keeping every installed formula and cask.
+    autoMigrate = true;
   };
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";  # remove anything not listed here
     onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
+    # steipete/tap provides the imsg formula; keep it declared or zap would untap it.
+    taps = [
+      { name = "steipete/tap"; }
+    ];
+    # Everything on this machine must be listed here - zap removes anything that isn't.
     brews = [
+      # from the original author's setup
       "herdr"
+      # cyril's existing formulas, preserved so zap doesn't uninstall them
+      "cliclick"
+      "cmake"
+      "ffmpeg"
+      "gh"
+      "git-lfs"
+      "mas"
+      "neovim"
+      "ripgrep"
+      "rubberband"
+      "steipete/tap/imsg"
+      "tesseract-lang"
+      "tmux"
+      "xcodegen"
+      "xcodes"
+      "zeroclaw"
     ];
     casks = [
+      # from the original author's setup
       "wezterm"
       "claude-code"
+      # cyril's existing casks, preserved so zap doesn't uninstall them
+      "1password-cli"
+      "cc-switch"
+      "codex"
+      "ghostty"
+      "hammerspoon"
+      "orbstack"
     ];
   };
 }

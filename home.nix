@@ -22,6 +22,14 @@ in
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
 
+  programs.git = {
+    enable = true;
+    settings.user = {
+      name = "Cyril";
+      email = "293165+terry6394@users.noreply.github.com";
+    };
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;      # ghost text from history
