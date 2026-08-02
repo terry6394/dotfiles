@@ -4,6 +4,11 @@ Deliberate decisions in this repo - do NOT silently revert them:
 
 - `homebrew.onActivation.cleanup = "zap"` in `configuration.nix` is intentional. It forces the good habit of declaring every Homebrew package in the Nix config instead of installing things ad-hoc, which keeps the machine reproducible. Do not soften it to `uninstall` or `none`. Users are warned about its effect in README.md; this note is for anyone tempted to change the setting itself.
 - Never commit `.no-mistakes/` validation evidence to this public repo. `.no-mistakes/` is gitignored; if a validation pipeline stages evidence into a branch, drop it before merging.
+- **Security/privacy pre-flight before EVERY commit.** This repo is public. Before `git commit`, check:
+  - `git status` shows no untracked credentials, auth files, backups, or runtime logs (they belong in `.gitignore`; `home/.pi/agent/auth.json`, `home/.config/herdr/*` runtime files are already covered).
+  - Staged content has no secrets or personal data: API keys/tokens (`ghp_`, `sk-`, `AKIA`, `BEGIN ... PRIVATE KEY`), real email/phone/address, or machine identifiers (hostname, MAC address, serial).
+  - Every new file's contents were reviewed - never `git add -A` blindly.
+  - This checklist applies to git history too: a secret committed once stays in history even if removed later.
 
 ## Maintaining this file
 
