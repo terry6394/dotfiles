@@ -9,6 +9,7 @@ Deliberate decisions in this repo - do NOT silently revert them:
   - Staged content has no secrets or personal data: API keys/tokens (`ghp_`, `sk-`, `AKIA`, `BEGIN ... PRIVATE KEY`), real email/phone/address, or machine identifiers (hostname, MAC address, serial).
   - Every new file's contents were reviewed - never `git add -A` blindly.
   - This checklist applies to git history too: a secret committed once stays in history even if removed later.
+- **Upstream sync workflow (on user request).** When the user says to sync upstream (`kunchenguid/dotfiles`), do: `git fetch upstream`; list new commits with `git log --oneline main..upstream/main`; summarize each as usable-feature / fix / irrelevant (this repo is heavily personalized - the user's git identity, agent policy, and local tools are fork-only); wait for the user to pick; then `git cherry-pick` the chosen commits. Never merge upstream wholesale or cherry-pick without the user's explicit pick. After syncing, tag a new release point if the user wants one.
 
 ## Maintaining this file
 
