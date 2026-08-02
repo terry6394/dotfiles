@@ -86,6 +86,14 @@ in
 
   home.file.".claude/CLAUDE.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
+
+  # Lavish Editor skill (kunchenguid/lavish-axi, MIT): vendored single SKILL.md,
+  # linked for both Pi (.agents) and Claude Code (.claude). CLI + session hook
+  # stay manual npm installs, documented in README.
+  home.file.".agents/skills/lavish".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.agents/skills/lavish";
+  home.file.".claude/skills/lavish".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.agents/skills/lavish";
   home.file.".codex/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
   home.file.".config/opencode/AGENTS.md".source =

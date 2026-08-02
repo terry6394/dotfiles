@@ -180,6 +180,24 @@ Both packages execute with your full user permissions and must be trusted like a
 
 Home Manager deliberately does not manage `~/.pi/agent` itself, or Pi authentication, sessions, trust decisions, caches, npm/git package trees, or any other runtime state. The model overrides contain no credentials or endpoint settings, do not choose a default model, and only take effect after you authenticate Pi yourself. This remains an additive post-video layer: it does not install Pi, a launcher, or package source code into this repository.
 
+## Optional: Lavish Editor
+
+[Lavish Editor](https://github.com/kunchenguid/lavish-axi) is an AXI for turning agent output into rich HTML artifacts you can annotate and send feedback on from the browser. This repo vendors its `lavish` skill (a single MIT-licensed `SKILL.md`, author Kun Chen) at `home/.agents/skills/lavish`; Home Manager links it into both `~/.agents/skills/lavish` (Pi) and `~/.claude/skills/lavish` (Claude Code). No rebuild needed to use it - invoke `/lavish <request>` or just ask for a visual artifact.
+
+The CLI itself stays on demand (`npx -y lavish-axi <file>` per the skill), or install it globally like Pi and opt into ambient session hooks:
+
+```sh
+npm install -g lavish-axi
+lavish-axi setup hooks   # SessionStart hook for Claude Code, Codex, OpenCode, Copilot CLI
+```
+
+To refresh the vendored skill after upstream changes:
+
+```sh
+npx skills add kunchenguid/lavish-axi --skill lavish -g -y
+cp ~/.agents/skills/lavish/SKILL.md home/.agents/skills/lavish/SKILL.md
+```
+
 ## Notes
 
 The first time you launch `nvim`, it bootstraps [lazy.nvim](https://github.com/folke/lazy.nvim) by cloning plugins from GitHub.
