@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Blocks committing a machine-local username personalization of flake.nix.
+#
+# bootstrap.sh personalizes flake.nix's "user =" line per machine. That local
+# change must stay uncommitted so all machines share one canonical username on
+# origin/main. Bypass only for a deliberate canonical rename:
+#   git commit --no-verify
+set -euo pipefail
+
+# Only matters when flake.nix is staged.
+if ! git diff --cached --name-only -- flake.nix | grep -q '^flake.nix$'; then
+  exit 0
+fi
+
+# Skip merges git drives itself (MERGE_HEAD commits carry no staged intent).
+if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
+  exit 0
+fi
+
+read_username() { # $1 = tree-ish prefix ending in ":"; ":" alone = staged index
+  git show "${1}flake.nix" 2>/dev/null \
+    | sed -nE 's/^[[:space:]]*user = "([^"]+)";.*/\1/p' | head -n1
+}
+
+NEW_USER="$(read_username :)"
+if [ -z "$NEW_USER" ]; then
+  exit 0
+fi
+
+MAIN_USER="$(read_username origin/main: || true)"
+if [ -z "$MAIN_USER" ]; then
+  MAIN_USER="$(read_username HEAD || true)"
+fi
+if [ -z "$MAIN_USER" ] || [ "$NEW_USER" = "$MAIN_USER" ]; then
+  exit 0
+fi
+
+cat >&2 <<EOF
+pre-commit: blocked - flake.nix username is "$NEW_USER" but the shared baseline
+(origin/main) has "$MAIN_USER". This is almost always the machine-local
+personalization bootstrap.sh wrote for this Mac. Keep it uncommitted:
+
+  git restore --staged flake.nix
+
+then commit the rest. If you truly mean to rename the canonical user for all
+machines, commit with:
+
+  git commit --no-verify
+EOF
+exit 1

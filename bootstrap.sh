@@ -20,6 +20,11 @@ echo "==> Step 2: symlink this repo to ~/.dotfiles"
 # has to exist before the first switch or the build will fail to find them.
 ln -sfn "$DIR" ~/.dotfiles
 
+# Activate the pre-commit hook: it blocks committing this machine's username
+# personalization (see .githooks/pre-commit). New machines get this for free.
+# Note: core.hooksPath must be absolute - a relative path resolves against .git/.
+git config core.hooksPath "$DIR/.githooks"
+
 echo "==> Step 3: personalize the configured username"
 # Do this before any sudo call: sudo resets $USER to root, so whoami has to
 # run as the real interactive user first.

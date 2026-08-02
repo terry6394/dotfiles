@@ -90,6 +90,14 @@ If you clone it, review these before you run `bootstrap.sh`:
 - **Host label** `"mac"`, in three places: `flake.nix` (the `darwinConfigurations."mac"` name), `rebuild.sh:5` (the `#mac` at the end of the flake reference), and `bootstrap.sh`'s first-switch command (also `#mac`).
   All three have to match.
 - **CPU architecture**, `hostPlatform` in `configuration.nix` (see Prerequisites above).
+- **nvm / Node version**: `home.nix` hardcodes `~/.nvm/versions/node/v24.13.1/bin` onto PATH (it carries pi, node, npm). Install nvm and **Node v24.13.1** on every machine so that path exists - a different version silently drops pi/node/npm from PATH.
+
+**Multi-machine sync (different usernames):** `bootstrap.sh` rewrites the `user =` line in `flake.nix` to match each machine's macOS username, so on a machine whose username differs from the shared baseline, `flake.nix` stays **locally modified and uncommitted**. That local personalization is expected - it is the only per-machine difference. Rules:
+
+- Never commit it. `git add -A` stages it too, but the bundled pre-commit hook blocks committing a `flake.nix` whose username differs from `origin/main` (unstage with `git restore --staged flake.nix`; deliberate canonical renames use `git commit --no-verify`).
+- Daily `git pull` keeps the local personalization intact - upstream changes rarely touch `flake.nix`. If a pull is refused because it would overwrite the local `flake.nix`: `git stash`, `git pull`, `git stash pop`, then `./bootstrap.sh` to re-personalize if needed.
+- `rebuild.sh` aborts before switching if the configured username doesn't match `whoami`, so a lost personalization (e.g. after `git checkout -- flake.nix`) can't silently build for the wrong account.
+- Hooks activate automatically on new machines via `bootstrap.sh` (`git config core.hooksPath .githooks`). On an existing machine run that once - then the check is enforced, not remembered. Use the absolute path (`.githooks` relative to the repo root): `git config core.hooksPath "$PWD/.githooks"`.
 
 **Git identity:** this config deliberately does not set your git name or email.
 Git will stop your first commit and tell you to set them (`git config --global user.name "Your Name"` and `git config --global user.email you@example.com`).
