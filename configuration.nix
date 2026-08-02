@@ -40,14 +40,14 @@
     # steipete/tap provides the imsg formula; kunchenguid/tap provides the
     # pi-launcher cask; farion1231/ccswitch provides the cc-switch cask;
     # anomalyco/tap provides the opencode formula; hudochenkov/sshpass
-    # provides the sshpass formula. Keep them all declared or zap would
-    # untap them.
+    # provides the sshpass formula. Keep them all declared (or zap would
+    # untap them) and trusted (Homebrew 6.0 requires tap trust).
     taps = [
-      { name = "steipete/tap"; }
-      { name = "kunchenguid/tap"; }
-      { name = "farion1231/ccswitch"; }
-      { name = "anomalyco/tap"; }
-      { name = "hudochenkov/sshpass"; }
+      { name = "steipete/tap"; trusted = true; }
+      { name = "kunchenguid/tap"; trusted = true; }
+      { name = "farion1231/ccswitch"; trusted = true; }
+      { name = "anomalyco/tap"; trusted = true; }
+      { name = "hudochenkov/sshpass"; trusted = true; }
     ];
     # Everything on this machine must be listed here - zap removes anything that isn't.
     brews = [
