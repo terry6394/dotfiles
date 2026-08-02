@@ -37,9 +37,11 @@
     onActivation.cleanup = "zap";  # remove anything not listed here
     onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
-    # steipete/tap provides the imsg formula; keep it declared or zap would untap it.
+    # steipete/tap provides the imsg formula; kunchenguid/tap provides the
+    # pi-launcher cask; keep both declared or zap would untap them.
     taps = [
       { name = "steipete/tap"; }
+      { name = "kunchenguid/tap"; }
     ];
     # Everything on this machine must be listed here - zap removes anything that isn't.
     brews = [
@@ -73,6 +75,7 @@
       "ghostty"
       "hammerspoon"
       "orbstack"
+      "pi-launcher"
     ];
   };
 }
