@@ -22,6 +22,9 @@ in
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
 
+  # pi and other npm globals live under nvm's node; keep them on PATH.
+  home.sessionPath = [ "/Users/${user}/.nvm/versions/node/v24.13.1/bin" ];
+
   programs.git = {
     enable = true;
     settings.user = {
