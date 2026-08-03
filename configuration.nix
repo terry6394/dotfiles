@@ -20,7 +20,13 @@
       _HIHideMenuBar = true;  # auto-hide the menu bar
       AppleShowAllExtensions = true;
     };
-    dock.autohide = true;
+    dock.autohide = false;   # keep the Dock always visible (user preference)
+    dock.tilesize = 39;      # small Dock icons (user's current size)
+    dock.magnification = false;  # no icon zoom on hover (user preference)
+    finder.AppleShowAllFiles = true;       # show hidden files
+    finder.ShowPathbar = true;             # path bar at bottom of Finder windows
+    finder.ShowStatusBar = true;           # item count / disk space at bottom
+    finder.FXDefaultSearchScope = "SCcf";  # search the current folder by default
     finder.FXPreferredViewStyle = "Nlsv";  # list view by default
     finder.CreateDesktop = false;          # clean desktop
     trackpad.Clicking = true;              # tap to click
