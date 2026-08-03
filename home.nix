@@ -96,6 +96,4 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.agents/skills/lavish";
   home.file.".codex/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
-  home.file.".config/opencode/AGENTS.md".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
 }

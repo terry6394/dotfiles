@@ -45,14 +45,13 @@
     onActivation.extraFlags = [ "--force" ];
     # steipete/tap provides the imsg formula; kunchenguid/tap provides the
     # pi-launcher cask; farion1231/ccswitch provides the cc-switch cask;
-    # anomalyco/tap provides the opencode formula; hudochenkov/sshpass
-    # provides the sshpass formula. Keep them all declared (or zap would
-    # untap them) and trusted (Homebrew 6.0 requires tap trust).
+    # hudochenkov/sshpass provides the sshpass formula. Keep them all
+    # declared (or zap would untap them) and trusted (Homebrew 6.0
+    # requires tap trust).
     taps = [
       { name = "steipete/tap"; trusted = true; }
       { name = "kunchenguid/tap"; trusted = true; }
       { name = "farion1231/ccswitch"; trusted = true; }
-      { name = "anomalyco/tap"; trusted = true; }
       { name = "hudochenkov/sshpass"; trusted = true; }
     ];
     # Everything on this machine must be listed here - zap removes anything that isn't.
@@ -67,7 +66,6 @@
       "git-lfs"
       "mas"
       "neovim"
-      "opencode"
       "ripgrep"
       "rubberband"
       "sdl2-compat"  # required by ffmpeg; zap would otherwise uninstall it every switch
@@ -77,7 +75,6 @@
       "tmux"
       "xcodegen"
       "xcodes"
-      "zeroclaw"
     ];
     casks = [
       # from the original author's setup
@@ -88,8 +85,6 @@
       "cc-switch"
       "codex"
       "ghostty"
-      "hammerspoon"
-      "orbstack"
       "pi-launcher"
     ];
   };
