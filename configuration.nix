@@ -85,6 +85,7 @@
       "cc-switch"
       "codex"
       "ghostty"
+      "orbstack"
       "pi-launcher"
     ];
   };
