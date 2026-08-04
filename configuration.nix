@@ -10,8 +10,6 @@ let
   commonBrews = [
     "herdr"
     "gh"
-    "git-lfs"
-    "ripgrep"
     "neovim"
   ];
 
@@ -32,6 +30,7 @@ let
       "cliclick"
       "cmake"
       "ffmpeg"
+      "git-lfs"
       "mas"
       "rubberband"
       "sdl2-compat"  # required by ffmpeg; zap would otherwise uninstall it every switch
