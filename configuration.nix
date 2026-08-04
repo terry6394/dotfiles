@@ -12,7 +12,6 @@ let
     "gh"
     "git-lfs"
     "ripgrep"
-    "tmux"
     "neovim"
   ];
 
