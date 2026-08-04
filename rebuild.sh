@@ -18,4 +18,12 @@ if [ "$FLAKE_USER" != "$REAL_USER" ]; then
   exit 1
 fi
 
+# Pre-flight: the machine label must exist, or the per-machine software tier
+# silently collapses to common-only. bootstrap.sh sets it interactively.
+FLAKE_MACHINE="$(sed -nE 's/^[[:space:]]*machine = "([^"]+)";.*/\1/p' "$DIR/flake.nix" | head -n1)"
+if [ -z "$FLAKE_MACHINE" ]; then
+  echo "rebuild: no machine label in flake.nix - run ./bootstrap.sh to set it." >&2
+  exit 1
+fi
+
 exec sudo darwin-rebuild switch --flake ~/.dotfiles#mac

@@ -48,6 +48,29 @@ else
   echo "    flake.nix already matches \"$REAL_USER\", nothing to do."
 fi
 
+echo "==> Step 3b: configure the machine label"
+# machine selects the per-machine software tier in configuration.nix
+# (common lists every machine gets, machine lists only this one).
+# Detect the host name and confirm the label, like the username step.
+HOST_NAME="$(scutil --get LocalHostName 2>/dev/null || hostname -s)"
+FLAKE_MACHINE="$(sed -nE 's/^[[:space:]]*machine = "([^"]+)";.*/\1/p' "$DIR/flake.nix" | head -n1)"
+if [ -z "$FLAKE_MACHINE" ]; then
+  echo "    Could not find the \"machine = \" line in flake.nix."
+  echo "    Edit flake.nix yourself before continuing."
+  exit 1
+fi
+read -r -p "    Host is \"$HOST_NAME\". Keep machine label \"$FLAKE_MACHINE\"? [Y/n] " REPLY
+if [ "$REPLY" = "n" ] || [ "$REPLY" = "N" ]; then
+  read -r -p "    Enter the machine label for this Mac (e.g. desk, laptop): " NEW_MACHINE
+  if [ -n "$NEW_MACHINE" ]; then
+    sed -i '' -E "s/^([[:space:]]*machine = \")[^\"]+(\";.*)/\1${NEW_MACHINE}\2/" "$DIR/flake.nix"
+    echo "    Updated. Review the change with: git diff flake.nix"
+  else
+    echo "    Skipped. Edit the \"machine = \" line in flake.nix yourself before continuing."
+    exit 1
+  fi
+fi
+
 echo "==> Step 4: first darwin-rebuild switch (pinned to nix-darwin-26.05)"
 # darwin-rebuild doesn't exist yet on a fresh machine, so run it straight
 # from the flake this once. After this, rebuild.sh works normally.
