@@ -23,7 +23,7 @@
       # Which machine this build targets. Selects the per-machine software set
       # in configuration.nix: common lists install on every machine, machine
       # lists only on the named machine (see machineBrews/machineCasks there).
-      machine = "desk";
+      machine = "laptop";
     in
     {
       darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {

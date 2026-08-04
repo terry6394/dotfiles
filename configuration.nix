@@ -26,7 +26,7 @@ let
   ];
 
   machineBrews = {
-    desk = [
+    laptop = [
       "cliclick"
       "cmake"
       "ffmpeg"
@@ -43,7 +43,7 @@ let
   };
 
   machineCasks = {
-    desk = [
+    laptop = [
       "cc-switch"
       "ghostty"
       "orbstack"
@@ -51,7 +51,7 @@ let
   };
 
   machineTaps = {
-    desk = [
+    laptop = [
       # steipete/tap provides imsg; farion1231/ccswitch provides cc-switch;
       # hudochenkov/sshpass provides sshpass. Keep them declared (or zap would
       # untap them) and trusted (Homebrew 6.0 requires tap trust).

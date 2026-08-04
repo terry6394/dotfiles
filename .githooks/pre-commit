@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Blocks committing a machine-local username personalization of flake.nix.
+# Blocks committing a machine-local personalization of flake.nix.
 #
-# bootstrap.sh personalizes flake.nix's "user =" line per machine. That local
-# change must stay uncommitted so all machines share one canonical username on
-# origin/main. Bypass only for a deliberate canonical rename:
+# bootstrap.sh personalizes flake.nix's "user =" and "machine =" lines per
+# machine. Those local changes must stay uncommitted so all machines share one
+# canonical username and machine label on origin/main. Bypass only for a
+# deliberate canonical rename:
 #   git commit --no-verify
 set -euo pipefail
 
@@ -17,34 +18,33 @@ if git rev-parse -q --verify MERGE_HEAD >/dev/null; then
   exit 0
 fi
 
-read_username() { # $1 = tree-ish prefix ending in ":"; ":" alone = staged index
+read_value() { # $1 = tree-ish prefix ending in ":" (":" alone = staged index); $2 = key
   git show "${1}flake.nix" 2>/dev/null \
-    | sed -nE 's/^[[:space:]]*user = "([^"]+)";.*/\1/p' | head -n1
+    | sed -nE "s/^[[:space:]]*${2} = \"([^\"]+)\";.*/\1/p" | head -n1
 }
 
-NEW_USER="$(read_username :)"
-if [ -z "$NEW_USER" ]; then
-  exit 0
-fi
+for KEY in user machine; do
+  NEW="$(read_value : "$KEY")"
+  [ -z "$NEW" ] && continue
 
-MAIN_USER="$(read_username origin/main: || true)"
-if [ -z "$MAIN_USER" ]; then
-  MAIN_USER="$(read_username HEAD || true)"
-fi
-if [ -z "$MAIN_USER" ] || [ "$NEW_USER" = "$MAIN_USER" ]; then
-  exit 0
-fi
+  MAIN="$(read_value origin/main: "$KEY" || true)"
+  if [ -z "$MAIN" ]; then
+    MAIN="$(read_value HEAD: "$KEY" || true)"
+  fi
+  [ -z "$MAIN" ] || [ "$NEW" = "$MAIN" ] && continue
 
-cat >&2 <<EOF
-pre-commit: blocked - flake.nix username is "$NEW_USER" but the shared baseline
-(origin/main) has "$MAIN_USER". This is almost always the machine-local
+  cat >&2 <<EOF
+pre-commit: blocked - flake.nix $KEY is "$NEW" but the shared baseline
+(origin/main) has "$MAIN". This is almost always the machine-local
 personalization bootstrap.sh wrote for this Mac. Keep it uncommitted:
 
   git restore --staged flake.nix
 
-then commit the rest. If you truly mean to rename the canonical user for all
+then commit the rest. If you truly mean to rename the canonical $KEY for all
 machines, commit with:
 
   git commit --no-verify
 EOF
-exit 1
+  exit 1
+done
+exit 0
