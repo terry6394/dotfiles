@@ -1,4 +1,68 @@
-{ user, ... }:
+{ user, machine, ... }:
+
+let
+  # Software split into two tiers:
+  # - common*: every machine gets these (core workflow, agents, security).
+  # - machine*: only the named machine gets these (dev toolchains, media, etc.).
+  # Add a new machine by extending the attrsets below and setting `machine` in
+  # flake.nix on that machine. Nothing here is removed by zap unless it falls
+  # out of both tiers on that machine.
+  commonBrews = [
+    "herdr"
+    "gh"
+    "git-lfs"
+    "ripgrep"
+    "tmux"
+    "neovim"
+  ];
+
+  commonCasks = [
+    "wezterm"
+    "claude-code"
+    "1password-cli"
+    "codex"
+    "pi-launcher"
+  ];
+
+  commonTaps = [
+    { name = "kunchenguid/tap"; trusted = true; }
+  ];
+
+  machineBrews = {
+    desk = [
+      "cliclick"
+      "cmake"
+      "ffmpeg"
+      "mas"
+      "rubberband"
+      "sdl2-compat"  # required by ffmpeg; zap would otherwise uninstall it every switch
+      "sshpass"
+      "steipete/tap/imsg"
+      "tesseract-lang"
+      "xcodegen"
+      "xcodes"
+    ];
+  };
+
+  machineCasks = {
+    desk = [
+      "cc-switch"
+      "ghostty"
+      "orbstack"
+    ];
+  };
+
+  machineTaps = {
+    desk = [
+      # steipete/tap provides imsg; farion1231/ccswitch provides cc-switch;
+      # hudochenkov/sshpass provides sshpass. Keep them declared (or zap would
+      # untap them) and trusted (Homebrew 6.0 requires tap trust).
+      { name = "steipete/tap"; trusted = true; }
+      { name = "farion1231/ccswitch"; trusted = true; }
+      { name = "hudochenkov/sshpass"; trusted = true; }
+    ];
+  };
+in
 
 {
   # Determinate already manages the Nix daemon, so nix-darwin shouldn't.
@@ -43,50 +107,10 @@
     onActivation.cleanup = "zap";  # remove anything not listed here
     onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
-    # steipete/tap provides the imsg formula; kunchenguid/tap provides the
-    # pi-launcher cask; farion1231/ccswitch provides the cc-switch cask;
-    # hudochenkov/sshpass provides the sshpass formula. Keep them all
-    # declared (or zap would untap them) and trusted (Homebrew 6.0
-    # requires tap trust).
-    taps = [
-      { name = "steipete/tap"; trusted = true; }
-      { name = "kunchenguid/tap"; trusted = true; }
-      { name = "farion1231/ccswitch"; trusted = true; }
-      { name = "hudochenkov/sshpass"; trusted = true; }
-    ];
+    # Homebrew 6.0 requires third-party taps to be trusted (see taps above).
+    taps = commonTaps ++ (machineTaps.${machine} or []);
     # Everything on this machine must be listed here - zap removes anything that isn't.
-    brews = [
-      # from the original author's setup
-      "herdr"
-      # cyril's existing formulas, preserved so zap doesn't uninstall them
-      "cliclick"
-      "cmake"
-      "ffmpeg"
-      "gh"
-      "git-lfs"
-      "mas"
-      "neovim"
-      "ripgrep"
-      "rubberband"
-      "sdl2-compat"  # required by ffmpeg; zap would otherwise uninstall it every switch
-      "sshpass"
-      "steipete/tap/imsg"
-      "tesseract-lang"
-      "tmux"
-      "xcodegen"
-      "xcodes"
-    ];
-    casks = [
-      # from the original author's setup
-      "wezterm"
-      "claude-code"
-      # cyril's existing casks, preserved so zap doesn't uninstall them
-      "1password-cli"
-      "cc-switch"
-      "codex"
-      "ghostty"
-      "orbstack"
-      "pi-launcher"
-    ];
+    brews = commonBrews ++ (machineBrews.${machine} or []);
+    casks = commonCasks ++ (machineCasks.${machine} or []);
   };
 }

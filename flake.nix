@@ -19,10 +19,15 @@
       # The one username line to change if this isn't your machine.
       # bootstrap.sh offers to rewrite this for you if your macOS username differs.
       user = "cyril";
+
+      # Which machine this build targets. Selects the per-machine software set
+      # in configuration.nix: common lists install on every machine, machine
+      # lists only on the named machine (see machineBrews/machineCasks there).
+      machine = "desk";
     in
     {
       darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit user; };
+        specialArgs = { inherit user machine; };
         modules = [
           ./configuration.nix
           nix-homebrew.darwinModules.nix-homebrew
