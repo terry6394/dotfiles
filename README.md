@@ -130,6 +130,31 @@ If you don't use it, just remove it from `brews` in your copy.
 - The `cc` and `co` shell aliases in `home.nix` are high-agency shortcuts: `claude --dangerously-skip-permissions` and `codex --full-auto`.
   They're convenient for me, but know what they do before you use them.
 
+## Multi-machine operation
+
+Each machine's config identity is two variables in `flake.nix`: `user` (the macOS account) and `machine` (the software-tier label). Neither is tied to the macOS host name - the host name is only read once during bootstrap to guide confirming the `machine` label.
+
+**Software tiers** (in `configuration.nix`): `common*` lists install on every machine; `machine*` lists install only on the machine whose label matches. Add a machine by extending `machineBrews`/`machineCasks`/`machineTaps` with e.g. `laptop = [...];` and setting `machine = "laptop"` in `flake.nix` on that machine.
+
+**First deploy on a new Mac:**
+
+```sh
+git clone --branch v1.1.0 https://github.com/terry6394/dotfiles.git
+cd dotfiles
+./bootstrap.sh   # installs Nix, links ~/.dotfiles, confirms user + machine label, first switch
+```
+
+**Sync an existing machine after this repo changes:**
+
+```sh
+cd ~/dotfiles
+git pull
+# if this machine's machine label differs from the repo default, edit flake.nix locally
+./rebuild.sh
+```
+
+**Automatic guards:** the pre-commit hook blocks committing a machine-local `user` or `machine` change to `origin/main` (use `git commit --no-verify` only for a deliberate canonical rename); `rebuild.sh` refuses to run without a machine label; `bootstrap.sh` sets both interactively on first setup.
+
 ## Repo tour
 
 - `flake.nix` - the entry point.
