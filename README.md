@@ -233,7 +233,9 @@ git clone https://github.com/kunchenguid/firstmate ~/code/firstmate
 cd ~/code/firstmate && pi    # launch your first mate
 ```
 
-`rebuild.sh` detects a missing clone at `~/code/firstmate` and offers to install it on every machine (override the location with `FIRSTMATE_DIR`). After install it writes `config/backend = herdr` automatically when tmux is absent - this config ships herdr, not tmux, and firstmate's backend selection reads `--backend` > `FM_BACKEND` > `config/backend` > auto-detect > tmux. Its local choices live in gitignored `config/` files under the firstmate clone (`config/backend`, `config/calm`, ...); its state and project clones live under its own `data/`, `state/`, and `projects/` (the effective `FM_HOME`). Requires `gh auth login` on each machine. The bundled Pi Calm extension is adapted from firstmate.
+`rebuild.sh` detects a missing clone at `~/code/firstmate` and offers to install it (override the location with `FIRSTMATE_DIR`).
+
+Note: this config does not install tmux, so use the **herdr backend** (already installed) - see the firstmate docs for backend selection. The bundled Pi Calm extension is adapted from firstmate.
 
 ## Notes
 

@@ -29,22 +29,13 @@ fi
 # Optional agent distro: firstmate is a git clone, not a brew/nix package, so
 # nix cannot declare it. Ask once when missing (interactive terminals only);
 # the repo is self-contained and updates itself via git pull inside it.
-# After install, write config/backend = herdr: this config has no tmux, and
-# herdr (already installed) is firstmate's native experimental backend here.
 FM_DIR="${FIRSTMATE_DIR:-$HOME/code/firstmate}"
 if [ ! -d "$FM_DIR/.git" ] && [ -t 1 ]; then
   read -r -p "    firstmate is not installed at $FM_DIR. Install it? [y/N] " REPLY
   if [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ]; then
     mkdir -p "$(dirname "$FM_DIR")"
     git clone https://github.com/kunchenguid/firstmate "$FM_DIR"
-    if command -v tmux >/dev/null 2>&1; then
-      echo "    Installed. Launch with: cd $FM_DIR && pi"
-    else
-      mkdir -p "$FM_DIR/config"
-      printf 'herdr\n' > "$FM_DIR/config/backend"
-      echo "    Installed with config/backend = herdr (no tmux on this machine)."
-      echo "    Launch with: cd $FM_DIR && pi"
-    fi
+    echo "    Installed. Launch with: cd $FM_DIR && pi (herdr backend - see README)"
   fi
 fi
 
