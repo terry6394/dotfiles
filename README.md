@@ -224,19 +224,6 @@ npx skills add kunchenguid/lavish-axi --skill lavish -g -y
 cp ~/.agents/skills/lavish/SKILL.md home/.agents/skills/lavish/SKILL.md
 ```
 
-## Optional: firstmate
-
-[firstmate](https://github.com/kunchenguid/firstmate) is an agent distro - not an installable package, but a self-contained repo of instructions, skills, and scripts. Clone it once; from inside it, launching Pi (or `pi-signed`, Claude Code, Grok) instantiates your "first mate": a supervisor that dispatches a crew of agents across clean git worktrees and hands you finished PRs.
-
-```sh
-git clone https://github.com/kunchenguid/firstmate ~/code/firstmate
-cd ~/code/firstmate && pi    # launch your first mate
-```
-
-`rebuild.sh` detects a missing clone at `~/code/firstmate` and offers to install it (override the location with `FIRSTMATE_DIR`).
-
-Note: this config does not install tmux, so use the **herdr backend** (already installed) - see the firstmate docs for backend selection. The bundled Pi Calm extension is adapted from firstmate.
-
 ## Notes
 
 The first time you launch `nvim`, it bootstraps [lazy.nvim](https://github.com/folke/lazy.nvim) by cloning plugins from GitHub.

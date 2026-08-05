@@ -26,17 +26,4 @@ if [ -z "$FLAKE_MACHINE" ]; then
   exit 1
 fi
 
-# Optional agent distro: firstmate is a git clone, not a brew/nix package, so
-# nix cannot declare it. Ask once when missing (interactive terminals only);
-# the repo is self-contained and updates itself via git pull inside it.
-FM_DIR="${FIRSTMATE_DIR:-$HOME/code/firstmate}"
-if [ ! -d "$FM_DIR/.git" ] && [ -t 1 ]; then
-  read -r -p "    firstmate is not installed at $FM_DIR. Install it? [y/N] " REPLY
-  if [ "$REPLY" = "y" ] || [ "$REPLY" = "Y" ]; then
-    mkdir -p "$(dirname "$FM_DIR")"
-    git clone https://github.com/kunchenguid/firstmate "$FM_DIR"
-    echo "    Installed. Launch with: cd $FM_DIR && pi (herdr backend - see README)"
-  fi
-fi
-
 exec sudo darwin-rebuild switch --flake ~/.dotfiles#mac
