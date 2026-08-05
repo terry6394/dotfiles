@@ -1,4 +1,4 @@
-{ config, pkgs, user, ... }:
+{ config, pkgs, user, treehouse, ... }:
 
 let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
@@ -18,6 +18,9 @@ in
     neovim
     # the font everything renders in
     nerd-fonts.hack
+  ] ++ [
+    # treehouse: pool of reusable isolated git worktrees (firstmate's worktree provider)
+    treehouse.packages.${pkgs.system}.default
   ];
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
