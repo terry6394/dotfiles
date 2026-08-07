@@ -40,12 +40,21 @@ let
       "xcodegen"
       "xcodes"
     ];
+    # Office Mac mini: internal-systems development, Python/JS, AI-assisted.
+    # Deliberately minimal - add tools here as the work demands them.
+    "office-macmini" = [
+      "git-lfs"
+    ];
   };
 
   machineCasks = {
     laptop = [
       "cc-switch"
       "ghostty"
+      "orbstack"
+    ];
+    # Containers for internal-systems development.
+    "office-macmini" = [
       "orbstack"
     ];
   };
@@ -70,6 +79,11 @@ in
   nixpkgs.hostPlatform = "aarch64-darwin"; # use x86_64-darwin for Intel CPU
 
   system.primaryUser = user;
+
+  # Let sudo authenticate through Touch ID or Apple Watch instead of exposing
+  # the login password to terminal programs such as AI agents.
+  security.pam.services.sudo_local.touchIdAuth = true;
+
   users.users.${user} = {
     home = "/Users/${user}";
   };
